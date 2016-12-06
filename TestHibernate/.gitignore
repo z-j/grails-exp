@@ -1,0 +1,16 @@
+.idea/
+.slcache/
+/lib/
+/scripts/
+/target/
+/out/
+*.classpath
+*.project
+stacktrace.log
+/plugin.xml
+.DS_Store
+/.classpath/
+/.project/
+/web-app/plugins
+/web-app/WEB-INF/classes
+/wrapper
