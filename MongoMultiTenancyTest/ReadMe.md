@@ -27,3 +27,6 @@ optimistic locking can be disable for domain class:
 static mapping = {
         version false
     }
+
+##Version:
+Grails Version: 3.0.1  Groovy Version: 2.4.3  JVM Version: 1.8.0_31  'org.grails.plugins:mongodb:6.0.4'
