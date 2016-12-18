@@ -2,5 +2,6 @@
 .idea/
 build
 /out/
+/activemq-data/
 gradlew
 gradlew.bat
