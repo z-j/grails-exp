@@ -7,13 +7,11 @@ import org.grails.datastore.mapping.multitenancy.resolvers.SystemPropertyTenantR
 @Transactional
 class BookService {
 
-    def saveBookWIthTenant() {
-        System.setProperty(SystemPropertyTenantResolver.PROPERTY_NAME, "test1")
-        Book b = new Book(name:"TestBook:"+System.currentTimeSeconds())
+    def saveBookWithTenant(book) {
         Tenants.withCurrent{
-            b.save(flush:true)
+            book.save(flush:true)
         }
-        System.setProperty(SystemPropertyTenantResolver.PROPERTY_NAME, "")
+        return book?.id
     }
 
     def getBooksWIthTenant() {
@@ -44,8 +42,18 @@ class BookService {
         return books
     }
 
-    def saveBookWIthoutTenant() {
-        SimpleBook b = new SimpleBook(name: "TestBook:"+System.currentTimeSeconds())
-        b.save(flush:true)
+    def saveBookWithoutTenant(book) {
+        book.save(flush:true)
+        return book.id
+    }
+
+    def deleteBook(book){
+        book.delete()
+    }
+
+    def deleteBookWithTenant(book){
+        Tenants.withCurrent {
+            book.delete()
+        }
     }
 }

@@ -80,7 +80,7 @@ environments:
           mongodb:
             engine: codec
             connectionSourcesClass: org.grails.datastore.mapping.mongo.connections.MongoConnectionSources
-            connectionsCollection: "tennants"
+            connectionsCollection: "tenants"
             url: mongodb://localhost/Test
             host: localhost
             port: 27017
