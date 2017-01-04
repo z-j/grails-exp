@@ -16,6 +16,7 @@ class ActiveMQSpec extends Specification {
 
     final String queue_1 = "TestQueue1"
     final String queue_2 = "TestQueue2"
+    final String queue_3 = "TestQueue3"
 
     final String topic_1 = "TestTopic1"
     final String topic_2 = "VirtualTopic.TestTopic2"
@@ -134,6 +135,36 @@ class ActiveMQSpec extends Specification {
         println "Counters:"+
                 MessageListenerService.TestTopic1Consumer1Counter+","+
                 MessageListenerService.TestTopic1Consumer2Counter
+    }
+
+
+    /**
+     * Send messages using Template where session is created with transaction flag set to true
+     * if listener returns fine, then transaction is implicitly committed
+     * if listener message throws exception then transaction is implicitly rolled back
+     * Test that message is redelivered, according to redelivery policy, if exception is thrown
+     * Test by browsing the queue that queue contains right number of elements
+     */
+    void "Test Queue in Transactional Environment"() {
+        setup:
+
+        MessageListenerService.TestQueue3Consumer1Counter=0
+        MessageListenerService.TestQueue3Consumer1Counter == 0
+
+        when:
+        List deadMessages = jmsService.browse("ActiveMQ.DLQ") //dead letter queue msgs should be zero, before this test
+        then:
+        (deadMessages.size() == 0)
+
+        when:
+        ActiveMQMessage activeMQMessage1 = new ActiveMQMessage()
+        activeMQMessage1.setProperty("count", "1")
+        jmsService.send(queue: queue_3, activeMQMessage1)
+        Thread.sleep(2000)
+
+        then:
+        (MessageListenerService.TestQueue3Consumer1Counter == 2)//one increment for normal and one for delivery
+        (jmsService.browse("ActiveMQ.DLQ")).size() == 1  //dead letter queue should have 1 entry now
     }
 
 

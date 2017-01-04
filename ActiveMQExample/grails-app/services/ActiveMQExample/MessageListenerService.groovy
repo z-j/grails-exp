@@ -16,6 +16,7 @@ class MessageListenerService {
     static int TestTopic1Consumer1Counter=0
     static int TestTopic1Consumer2Counter=0
 
+    static int TestQueue3Consumer1Counter=0
 
     @Queue(name="TestQueue1")
     def void receiveTestQueue1(message) {
@@ -57,6 +58,13 @@ class MessageListenerService {
     def void receiveTestVirtualTopicConsumer2(message) {
         println ("receiveTestQueue2: vt"+message.toString())
         TestTopic1Consumer2Counter++
+    }
+
+    @Queue(name="TestQueue3", container = "transacted")
+    def void receiveInTransactionalModeTestQueue3(message) {
+        println ("receiveTestQueue3:"+message.toString())
+        TestQueue3Consumer1Counter++
+        throw new Exception("custom exception")
     }
 
 
